@@ -3,7 +3,7 @@
 #include <util/delay.h>
 #include <ctype.h>
 
-#define DOT_MILLISECONDS 100
+#define DOT_MILLISECONDS 120
 
 // use constants here
 #define delay(dots) _delay_ms((dots)*DOT_MILLISECONDS)
