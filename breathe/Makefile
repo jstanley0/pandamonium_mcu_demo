@@ -1,7 +1,7 @@
 DEVICE     = attiny85
 CLOCK      = 1000000
 PROGRAMMER = -c usbtiny
-OBJECTS    = main.o
+OBJECTS    = breathe.o
 
 # Tune the lines below only if you know what you are doing:
 
@@ -9,7 +9,7 @@ AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE)
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 # symbolic targets:
-all:	main.hex
+all:	breathe.hex
 
 .c.o:
 	$(COMPILE) -c $< -o $@
@@ -25,32 +25,32 @@ all:	main.hex
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:main.hex:i
+	$(AVRDUDE) -U flash:w:breathe.hex:i
 
 # Xcode uses the Makefile targets "", "clean" and "install"
 install: flash
 
 # if you use a bootloader, change the command below appropriately:
 load: all
-	bootloadHID main.hex
+	bootloadHID breathe.hex
 
 clean:
-	rm -f main.hex main.elf $(OBJECTS)
+	rm -f breathe.hex breathe.elf $(OBJECTS)
 
 # file targets:
-main.elf: $(OBJECTS)
-	$(COMPILE) -o main.elf $(OBJECTS)
+breathe.elf: $(OBJECTS)
+	$(COMPILE) -o breathe.elf $(OBJECTS)
 
-main.hex: main.elf
-	rm -f main.hex
-	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
-	avr-size --format=avr --mcu=$(DEVICE) main.elf
+breathe.hex: breathe.elf
+	rm -f breathe.hex
+	avr-objcopy -j .text -j .data -O ihex breathe.elf breathe.hex
+	avr-size --format=avr --mcu=$(DEVICE) breathe.elf
 # If you have an EEPROM section, you must also create a hex file for the
 # EEPROM and add it to the "flash" target.
 
 # Targets for code debugging and analysis:
-disasm:	main.elf
-	avr-objdump -d main.elf
+disasm:	breathe.elf
+	avr-objdump -d breathe.elf
 
 cpp:
-	$(COMPILE) -E main.c
+	$(COMPILE) -E breathe.c

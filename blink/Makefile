@@ -1,7 +1,7 @@
 DEVICE     = attiny85
 CLOCK      = 1000000
 PROGRAMMER = -c usbtiny
-OBJECTS    = main.o
+OBJECTS    = blink.o
 
 # Tune the lines below only if you know what you are doing:
 
@@ -9,7 +9,7 @@ AVRDUDE = avrdude $(PROGRAMMER) -p $(DEVICE)
 COMPILE = avr-gcc -Wall -Os -DF_CPU=$(CLOCK) -mmcu=$(DEVICE)
 
 # symbolic targets:
-all:	main.hex
+all:	blink.hex
 
 .c.o:
 	$(COMPILE) -c $< -o $@
@@ -25,32 +25,32 @@ all:	main.hex
 	$(COMPILE) -S $< -o $@
 
 flash:	all
-	$(AVRDUDE) -U flash:w:main.hex:i
+	$(AVRDUDE) -U flash:w:blink.hex:i
 
 # Xcode uses the Makefile targets "", "clean" and "install"
 install: flash
 
 # if you use a bootloader, change the command below appropriately:
 load: all
-	bootloadHID main.hex
+	bootloadHID blink.hex
 
 clean:
-	rm -f main.hex main.elf $(OBJECTS)
+	rm -f blink.hex blink.elf $(OBJECTS)
 
 # file targets:
-main.elf: $(OBJECTS)
-	$(COMPILE) -o main.elf $(OBJECTS)
+blink.elf: $(OBJECTS)
+	$(COMPILE) -o blink.elf $(OBJECTS)
 
-main.hex: main.elf
-	rm -f main.hex
-	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
-	avr-size --format=avr --mcu=$(DEVICE) main.elf
+blink.hex: blink.elf
+	rm -f blink.hex
+	avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
+	avr-size --format=avr --mcu=$(DEVICE) blink.elf
 # If you have an EEPROM section, you must also create a hex file for the
 # EEPROM and add it to the "flash" target.
 
 # Targets for code debugging and analysis:
-disasm:	main.elf
-	avr-objdump -d main.elf
+disasm:	blink.elf
+	avr-objdump -d blink.elf
 
 cpp:
-	$(COMPILE) -E main.c
+	$(COMPILE) -E blink.c
